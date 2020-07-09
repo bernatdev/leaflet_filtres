@@ -46,7 +46,7 @@ function onMapLoad() {
 			}
 			console.log(data_markers);
 			
-			render_to_map(data_markers,'');
+			render_to_map(data_markers,'');  // tots els marcadors sense filtre
 
 		},
 
@@ -59,21 +59,25 @@ function onMapLoad() {
 $('#kind_food_selector').on('change', function () {
 	console.log(this.value);
 	render_to_map(data_markers, this.value);
+
+	mapaCatalunya.fitBounds(markers.getBounds());  // el zoom es centra en la zona que abarquen els marcadors filtrats
+
 });
 
 function render_to_map(array_of_restaurants, filter) {
 
-	markers.clearLayers();
+	markers.clearLayers(); // netejo els marcadors previs
 
-	for (restaurant of array_of_restaurants) {
+	for (restaurant of array_of_restaurants) {   // bucle per recòrrer els objectes restaurant dins l'array
 		//console.log(item.kind_food);
-		if (restaurant.kind_food.includes(filter)) {
-			markers.addLayer(L.marker([restaurant.lat, restaurant.lng])
-				.bindPopup("<b>" + restaurant.name + "</b><br>" + restaurant.address + "<br>" + restaurant.kind_food));
+		if (restaurant.kind_food.includes(filter)) {   // si el tipus de menjar conté la paraula filtre
+			markers.addLayer(L.marker([restaurant.lat, restaurant.lng])   // afegeixo el restaurant al cluster de marcadors
+				.bindPopup("<b>" + restaurant.name + "</b><br>" + restaurant.address + "<br>" + restaurant.kind_food)); // afegeixo info al popup
 		}
 	}
 
-	mapaCatalunya.addLayer(markers);
+	mapaCatalunya.addLayer(markers);  // afegeixo els marcadors al mapa
+
 
 
 
